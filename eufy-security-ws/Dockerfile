@@ -14,9 +14,12 @@ RUN \
         g++ \
     && npm install --force \
     "github:Vestium-R/eufy-security-ws" \
-    && cd /usr/src/app/node_modules/eufy-security-ws \
+    && git clone https://github.com/Vestium-R/eufy-security-ws /tmp/eufy-security-ws \
+    && cd /tmp/eufy-security-ws \
     && npm install \
     && npm run build \
+    && cp -r /tmp/eufy-security-ws/dist /usr/src/app/node_modules/eufy-security-ws/ \
+    && rm -rf /tmp/eufy-security-ws \
     && cd /usr/src/app \
     && sed -i 's/return types_1.DeviceType.LOCK_8530 == type;/return types_1.DeviceType.LOCK_8530 == type || 189 == type;/' /usr/src/app/node_modules/eufy-security-client/build/http/device.js \
     && sed -i 's/else if (this.isLockWifiT8520P()) {/else if (this.isLockWifiVideo()) { metadata = { ...types_1.DeviceProperties[types_1.DeviceType.LOCK_8530] }; } else if (this.isLockWifiT8520P()) {/' /usr/src/app/node_modules/eufy-security-client/build/http/device.js \
