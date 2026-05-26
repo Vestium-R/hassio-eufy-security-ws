@@ -40,13 +40,16 @@ STATION_IP_ADDRESSES_JQ=""
 if bashio::config.has_value 'stations'; then
     while read -r data
     do
-        TMP_DATA=($(echo "${data}" | tr -d "{}\"[:blank:]" | tr "," " " | sed 's/serial_number://g;s/ip_address://g'))
-        if [ "$STATION_IP_ADDRESSES_ARG" = "" ]; then
-            STATION_IP_ADDRESSES_ARG="--arg ${TMP_DATA[0]} ${TMP_DATA[1]}"
-            STATION_IP_ADDRESSES_JQ="stationIPAddresses: { \$${TMP_DATA[0]}"
-        else
-            STATION_IP_ADDRESSES_ARG="$STATION_IP_ADDRESSES_ARG --arg ${TMP_DATA[0]} ${TMP_DATA[1]}"
-            STATION_IP_ADDRESSES_JQ="$STATION_IP_ADDRESSES_JQ, \$${TMP_DATA[0]}"
+        SERIAL=$(echo "${data}" | sed -n 's/.*"serial_number":[[:space:]]*"\([^"]*\)".*/\1/p')
+        IP=$(echo "${data}" | sed -n 's/.*"ip_address":[[:space:]]*"\([^"]*\)".*/\1/p')
+        if [ -n "$SERIAL" ] && [ -n "$IP" ]; then
+            if [ "$STATION_IP_ADDRESSES_ARG" = "" ]; then
+                STATION_IP_ADDRESSES_ARG="--arg ${SERIAL} ${IP}"
+                STATION_IP_ADDRESSES_JQ="stationIPAddresses: { \$${SERIAL}"
+            else
+                STATION_IP_ADDRESSES_ARG="$STATION_IP_ADDRESSES_ARG --arg ${SERIAL} ${IP}"
+                STATION_IP_ADDRESSES_JQ="$STATION_IP_ADDRESSES_JQ, \$${SERIAL}"
+            fi
         fi
     done <<<"$(bashio::config 'stations')"
     if [ "$STATION_IP_ADDRESSES_ARG" != "" ]; then

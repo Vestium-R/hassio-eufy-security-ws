@@ -44,5 +44,5 @@ jobs:
           context: ./eufy-security-ws
           platforms: ${{ matrix.platform }}
           push: true
-          tags: ghcr.io/vestium-r/hassio-eufy-security-ws-${{ matrix.arch }}:2.1.4
+          tags: ghcr.io/vestium-r/hassio-eufy-security-ws-${{ matrix.arch }}:2.1.5
           build-args: BUILD_FROM=${{ matrix.base }}
