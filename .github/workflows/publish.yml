@@ -4,3 +4,9 @@ name: "Publish"
 # HA Supervisor builds the Docker image directly from this repo's Dockerfile.
 on:
   workflow_dispatch:
+
+jobs:
+  noop:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Local build only — nothing to publish."
