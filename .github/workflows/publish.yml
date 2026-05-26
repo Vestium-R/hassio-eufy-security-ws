@@ -1,33 +1,6 @@
 name: "Publish"
 
+# Disabled — addon uses local build (no image: in config.yaml).
+# HA Supervisor builds the Docker image directly from this repo's Dockerfile.
 on:
-  push:
-    branches:
-      - master
-
-jobs:
-  publish:
-    name: Publish to ghcr.io
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-    steps:
-      - name: Checkout the repository
-        uses: actions/checkout@v4
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Publish
-        uses: home-assistant/builder@master
-        with:
-          args: |
-            --amd64 \
-            --aarch64 \
-            --target eufy-security-ws \
-            --docker-hub ghcr.io/vestium-r
+  workflow_dispatch:
