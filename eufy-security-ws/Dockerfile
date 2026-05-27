@@ -2,19 +2,8 @@ ARG BUILD_FROM
 FROM $BUILD_FROM
 
 WORKDIR /usr/src/app
-RUN \
-    set -x \
-    && apk add --no-cache \
-        nodejs \
-        npm \
-        jq \
-        git \
-        python3 \
-        make \
-        g++ \
-    && npm install --force --ignore-scripts \
-    "github:Vestium-R/eufy-security-ws"
-
+RUN apk add --no-cache nodejs jq
+COPY node_modules ./node_modules/
 COPY run.sh /
 RUN chmod a+x /run.sh
 WORKDIR /data

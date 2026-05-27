@@ -25,6 +25,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install npm dependencies (native, avoids QEMU hang)
+        working-directory: eufy-security-ws
+        run: npm install --force --ignore-scripts "github:Vestium-R/eufy-security-ws"
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
